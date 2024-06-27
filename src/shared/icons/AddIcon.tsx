@@ -1,13 +1,10 @@
-interface Props {
-  width?: number;
-  height?: number;
-  color?: string;
-}
+import { TIcon } from "../types/icon.types";
+
 export default function AddIcon({
   width = 5,
   height = 5,
   color = "currentColor",
-}: Props) {
+}: TIcon) {
   return (
     <svg
       className={`w-${width} h-${height}`}

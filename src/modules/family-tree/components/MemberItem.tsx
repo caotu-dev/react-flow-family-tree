@@ -2,43 +2,54 @@
 
 import { useFamilyStore } from "@/lib/zustand/familyTreeStore";
 import { Member } from "../types/member.types";
-import AddIcon from "./AddIcon";
+import AddIcon from "@icons/AddIcon";
+import EditIcon from "@/shared/icons/EditIcon";
+import DeleteIcon from "@/shared/icons/DeleteIcon";
 
 export default function MemberItem({ data }: { data: Member }) {
   const toggleModal = useFamilyStore((state) => state.openModal);
   const setBaseId = useFamilyStore((state) => state.setBaseId);
-  const addMember = () => {
+  const deleteMember = useFamilyStore((state) => state.delete);
+  const openMemberFormModal = (isEdit = false) => {
     setBaseId(data.id);
-    toggleModal(true);
+    toggleModal(true, isEdit);
   };
-  //   dark:bg-gray-800 dark:border-gray-700
+
   return (
     <div
-      className={`w-full max-w-sm bg-white border relative border-gray-200 rounded-lg shadow
+      className={`display-on-hover-parent w-full max-w-sm border relative border-gray-200 rounded-lg shadow
     ${
       data?.sex === "male"
-        ? "dark:bg-blue-700 dark:border-blue-700"
-        : "dark:bg-pink-600 dark:border-pink-600"
+        ? "bg-blue-700 border-blue-700"
+        : "bg-pink-600 border-pink-600"
     }
     `}
     >
-      <div className="flex items-center p-2 pb-6">
+      <div className="display-on-hover-child absolute right-2 top-0 flex justify-end gap-2">
+        <button className="w-4 h-4" onClick={() => openMemberFormModal(true)}>
+          <EditIcon color="white" />
+        </button>
+        <button className="w-4 h-4" onClick={() => deleteMember(data?.id)}>
+          <DeleteIcon color="white" />
+        </button>
+      </div>
+      <div className="flex items-center p-3 pb-6">
         <img
           className="w-14 h-14 rounded-full shadow-lg"
           src={data?.avatar}
           alt={data?.name}
         />
         <div className="pl-2">
-          <h5 className="text-xl font-medium text-gray-900 dark:text-white">
+          <h5 className="text-xl font-medium text-white">
             {data?.name}
           </h5>
           {data?.dob && (
-            <div className="text-sm text-gray-500 dark:text-white">
+            <div className="text-sm text-white">
               Dob: <span className="font-bold">{data?.dob}</span>
             </div>
           )}
           {data?.isSpouse && (
-            <div className="text-sm text-gray-500 dark:text-white">
+            <div className="text-sm text-white">
               Relationship:{" "}
               <span className="font-bold">
                 {data?.sex === "male" ? "Husband" : "Wife"}
@@ -49,8 +60,8 @@ export default function MemberItem({ data }: { data: Member }) {
       </div>
       <div className="absolute -bottom-5 w-full flex justify-center">
         <button
-          onClick={addMember}
-          className="w-10 h-10 cursor-pointer flex items-center justify-center border border-dashed rounded-full bg-gray-700"
+          onClick={() => openMemberFormModal()}
+          className="w-10 h-10 cursor-pointer flex items-center justify-center border border-dashed rounded-full bg-green-700"
         >
           <AddIcon color="white" />
         </button>

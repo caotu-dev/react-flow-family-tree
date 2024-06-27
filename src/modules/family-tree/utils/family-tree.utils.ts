@@ -56,3 +56,53 @@ export function arrToObj(arr: any[]) {
     });
     return myTree;
 }
+
+export const checkIfAllowAddSpouse = (selectedUser: Member | null) => {
+    if (selectedUser?.spouses?.length && selectedUser?.spouses?.length > 0) {
+        return false;
+    }
+    if (!selectedUser?.isSpouse) {
+        return true;
+    }
+    return false;
+};
+
+export const checkIfAllowAddChild = (selectedUser: Member | null) => {
+    if (selectedUser?.isSpouse) return true;
+    if (selectedUser?.spouses?.length && selectedUser?.spouses?.length > 0) {
+        return true;
+    }
+    return false;
+};
+
+export function handleDeleteMember(currentMembers: Member[], memberId: string | null) {
+    if(!memberId) return currentMembers;
+
+    const member = currentMembers.find(_ => _?.id === memberId);
+    if(!member) return currentMembers;
+
+    let deletedIds = [memberId];
+
+    // Remove current id from spouse if any
+    const spouseIndex = currentMembers.findIndex(_ => _?.spouses?.includes(memberId));
+    if(spouseIndex !== -1) {
+        currentMembers[spouseIndex].spouses = [];
+    }
+
+    // Remove current id from parent if any
+    const parentIndex = currentMembers.findIndex(_ => _?.children?.includes(memberId));
+    if(parentIndex !== -1) {
+        currentMembers[parentIndex].children = currentMembers[parentIndex].children?.filter(id => id !== memberId );
+    }
+
+    if(member?.spouses && member?.spouses?.length) {
+        deletedIds = deletedIds.concat(member.spouses)
+    }
+    if(member?.children && member?.children?.length) {
+        deletedIds = deletedIds.concat(member.children)
+    }
+
+    const members = currentMembers.filter(_ => !deletedIds.includes(_?.id));
+
+    return members;
+}

@@ -31,3 +31,12 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer components {
+  .display-on-hover-parent .display-on-hover-child {
+    @apply invisible
+  }
+  .display-on-hover-parent:hover .display-on-hover-child {
+    @apply visible
+  }
+}

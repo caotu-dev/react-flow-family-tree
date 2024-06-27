@@ -1,13 +1,14 @@
 "use client";
 
 import { Member } from "@/modules/family-tree/types/member.types";
-import { handleAddMember } from "@/modules/family-tree/utils/family-tree.utils";
+import { handleAddMember, handleDeleteMember } from "@/modules/family-tree/utils/family-tree.utils";
 import { Edge, Node } from "reactflow";
 import { create } from "zustand";
 
 interface TFamilyTree {
     members: Member[];
     isOpenedModal: boolean,
+    isEdit: boolean,
     baseId: string | null;
     familyNodes: Node[];
     saveFamilyNodes: (nodes: Node[]) => void;
@@ -15,8 +16,8 @@ interface TFamilyTree {
     saveFamilyEdges: (edges: Edge[]) => void;
     add: (newMember: Member) => void;
     update: (newMember: Member) => void;
-    delete?: (id: number) => void;
-    openModal: (state: boolean) => void;
+    delete: (id: string) => void;
+    openModal: (state: boolean, isEdit?: boolean) => void;
     setBaseId: (id: string) => void;
     getSelectedMember: () => Member | null;
 }
@@ -24,6 +25,7 @@ interface TFamilyTree {
 export const useFamilyStore = create<TFamilyTree>((set, get) => ({
     members: [],
     isOpenedModal: false,
+    isEdit: false,
     baseId: null,
     familyNodes: [],
     familyEdges: [],
@@ -33,12 +35,21 @@ export const useFamilyStore = create<TFamilyTree>((set, get) => ({
         const newMembers = handleAddMember(membersState, newMember, baseId)
         set({ members: [...newMembers] })
     },
-    update: (newMember: Member) => {
-        const membersState = get().members
-        set({ members: membersState })
+    update: (editedMember: Member) => {
+        const membersState = get().members;
+        const memberIndex = membersState.findIndex(_ => _?.id === editedMember?.id);
+        if (memberIndex !== -1) {
+            membersState[memberIndex] = editedMember;
+        }
+        set({ members: [...membersState] })
     },
-    openModal: (state: boolean) => {
+    delete: (id: string) => {
+        const membersState = handleDeleteMember(get().members, id);
+        set({ members: [...membersState] })
+    },
+    openModal: (state: boolean, isEdit = false) => {
         set({ isOpenedModal: state });
+        set({ isEdit: isEdit })
         if (!state) {
             set({ baseId: null })
         }
