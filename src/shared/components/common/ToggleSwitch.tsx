@@ -2,7 +2,7 @@
 export default function ToggleSwitch({ label, handleToggle }: { label: string, handleToggle: any }) {
 
   return (
-    <label className="inline-flex items-center mb-5 cursor-pointer">
+    <label className="inline-flex items-center cursor-pointer">
       <input onChange={handleToggle} type="checkbox" className="sr-only peer" />
       <div
         className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800
@@ -12,7 +12,7 @@ export default function ToggleSwitch({ label, handleToggle }: { label: string, h
           after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5
             after:transition-all dark:border-gray-600 peer-checked:bg-black"
       ></div>
-      <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+      <span className="ms-3 text-sm font-medium text-gray-500 dark:text-white">
         {label}
       </span>
     </label>

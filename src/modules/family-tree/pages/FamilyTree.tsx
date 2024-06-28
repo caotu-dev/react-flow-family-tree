@@ -11,8 +11,6 @@ import AddMemberModal from "../components/AddMemberModal";
 import { arrToObj } from "../utils/family-tree.utils";
 // import DevTools from "../components/dev-tools/DevTool";
 import MemberForm from "../components/MemberForm";
-import { initMembers } from "../config/node-edges";
-import ToggleSwitch from "@/shared/components/common/ToggleSwitch";
 import TopCenterPanel from "../components/panel/TopCenterPanel";
 import TopLeftPanel from "../components/panel/TopLeftPanel";
 import { NodeLayout } from "@/shared/enums/global.enum";
@@ -20,10 +18,12 @@ import { globalStore } from "@/lib/zustand/globalStore";
 import TopRightPanel from "../components/panel/TopRightPanel";
 import Widgets from "../components/Widgets";
 import { EdgeAnimated } from "../config/enum";
+import { initMembers } from "../config/node-edges";
 
 const nodeTypes = {
   custom: CustomNode,
 };
+
 
 export default function FamilyTree() {
   const members = useFamilyStore((state) => state.members);
@@ -37,6 +37,7 @@ export default function FamilyTree() {
   const setLayout = globalStore((state) => state.setLayout);
   const nodeLayout = globalStore((state) => state.nodeLayout);
   const lineStyle = globalStore((state) => state.lineStyle);
+  const lineAnimation = globalStore((state) => state.lineAnimation);
 
   const resetTree = () => {
     saveFamilyNodes([]);
@@ -52,7 +53,7 @@ export default function FamilyTree() {
     ) => {
       const { nodes: layoutedNodes, edges: layoutedEdges } = layoutElements(
         membersData,
-        1,
+        membersData[1]?.id,
         layout,
         edgeType,
         isAnimated
@@ -73,16 +74,16 @@ export default function FamilyTree() {
   useEffect(() => {
     if (members.length > 0) {
       const obj = arrToObj(members);
-      renderFamilyTreeCb(obj, nodeLayout, lineStyle);
+      renderFamilyTreeCb(obj, nodeLayout, lineStyle, lineAnimation);
     } else {
       resetTree();
     }
-  }, [members, nodeLayout, lineStyle]);
+  }, [members, nodeLayout, lineStyle, lineAnimation]);
 
   // useEffect(() => {
   //   const obj = arrToObj(initMembers);
-  //   renderFamilyTreeCb(obj, nodeLayout, lineStyle);
-  // }, [nodeLayout, lineStyle]);
+  //   renderFamilyTreeCb(obj, nodeLayout, lineStyle, lineAnimation);
+  // }, [nodeLayout, lineStyle, lineAnimation]);
 
   const changeLayout = (layout: NodeLayout) => {
     setLayout(layout);
@@ -94,7 +95,6 @@ export default function FamilyTree() {
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          connectionLineType={ConnectionLineType.SmoothStep}
           fitView
           nodeTypes={nodeTypes}
         >

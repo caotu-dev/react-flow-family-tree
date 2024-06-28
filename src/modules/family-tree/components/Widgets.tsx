@@ -1,21 +1,33 @@
 import { globalStore } from "@/lib/zustand/globalStore";
+import ToggleSwitch from "@/shared/components/common/ToggleSwitch";
 import ChevUpIcon from "@/shared/icons/ChevUpIcon";
 import { memo, useState } from "react";
 import { ConnectionLineType } from "reactflow";
+import { EdgeAnimated } from "../config/enum";
 
 const lineStyles = Object.values(ConnectionLineType);
 
 export default memo(() => {
   const setLineStyle = globalStore((state) => state.setLineStyle);
   const lineStyle = globalStore((state) => state.lineStyle);
+  const setLineAnimation = globalStore((state) => state.setLineAnimation);
 
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggle = (e: any) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setLineAnimation(EdgeAnimated.Yes);
+    } else {
+      setLineAnimation(EdgeAnimated.No);
+    }
+  };
 
   return (
     <>
       <div
-        className={`absolute  flex justify-center h-10 shadow-4xl ${
-          isExpanded ? "w-full rotate-180 -top-5" : "w-20 -top-10"
+        className={`flex justify-center h-10 shadow-4xl ${
+          isExpanded ? "w-full rotate-180 -top-5 absolute" : "w-20"
         }`}
       >
         <button
@@ -31,7 +43,10 @@ export default memo(() => {
         }`}
       >
         <div className="p-2">
-          <p className="text-md">Line styles:</p>
+          <div className="flex items-center justify-between">
+            <p className="text-md">Line styles:</p>
+            <ToggleSwitch label="Animation" handleToggle={handleToggle} />
+          </div>
           <div className="flex items-center flex-wrap gap-4 mt-2">
             {lineStyles?.map((style, index) => (
               <div

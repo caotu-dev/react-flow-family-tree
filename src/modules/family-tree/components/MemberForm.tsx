@@ -1,10 +1,11 @@
 import { useFamilyStore } from "@/lib/zustand/familyTreeStore";
 import AddIcon from "@icons/AddIcon";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   checkIfAllowAddChild,
   checkIfAllowAddSpouse,
 } from "../utils/family-tree.utils";
+import { Relationship } from "../config/enum";
 
 export default function MemberForm() {
   const formRef = useRef<any>();
@@ -97,9 +98,10 @@ export default function MemberForm() {
             <select
               id="sex"
               name="sex"
-              defaultValue="male"
+              defaultValue={isEdit ? selectedUser?.sex : ""}
               className="bg-gray-50 border border-gray-300 dark:text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-500 dark:placeholder-gray-400 text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
             >
+              <option value={""}>-- Select sex --</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
@@ -115,17 +117,20 @@ export default function MemberForm() {
               <select
                 id="category"
                 name="relationship"
-                defaultValue="spouse"
+                defaultValue={""}
                 className="bg-gray-50 border border-gray-300 dark:text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-500 dark:placeholder-black text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
               >
+                <option value={""}>-- Select relationship --</option>
+                {/* <option value={Relationship.Father}>Father</option>
+                <option value={Relationship.Mother}>Mother</option> */}
                 {checkIfAllowAddSpouse(selectedUser) && (
-                  <option value="spouse">Spouse</option>
+                  <option value={Relationship.Spouse}>Spouse</option>
                 )}
                 {checkIfAllowAddChild(selectedUser) && (
-                  <option value="child">Child</option>
+                  <option value={Relationship.Child}>Child</option>
                 )}
                 {/* {!selectedUser?.isSibling && (
-                  <option value="siblings">Siblings</option>
+                  <option value={Relationship.Sibling}>Siblings</option>
                 )} */}
               </select>
             </div>
@@ -134,7 +139,9 @@ export default function MemberForm() {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="text-white flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none
+             focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
+              dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
           >
             <AddIcon />
             {isEdit ? "Save" : "Add"}

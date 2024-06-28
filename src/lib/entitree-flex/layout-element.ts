@@ -67,7 +67,7 @@ export const layoutElements = (
     newEdge.source = sourceNode;
     newEdge.target = targetNode;
     newEdge.type = edgeType;
-    newEdge.animated = isAnimated;
+    newEdge.animated = !!isAnimated;
 
     // Check if target node is spouse or sibling
     const isTargetSpouse = !!edge.target.isSpouse;

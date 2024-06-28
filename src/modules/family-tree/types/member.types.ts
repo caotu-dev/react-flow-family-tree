@@ -7,8 +7,10 @@ export interface Member {
     dod?: string | null;
     relationship?: string;
     spouses?: string[] | null;
+    parents?: string[] | null;
     children?: string[] | null;
     siblings?: string[] | null;
     isSpouse?: boolean,
     isSibling?: boolean,
+    isParent?: boolean,
 }
