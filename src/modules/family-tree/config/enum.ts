@@ -7,6 +7,5 @@ export enum Relationship {
     Spouse = "spouse",
     Child = "child",
     Sibling = "sibling",
-    Father = "father",
-    Mother = "mother"
+    Parents = "parents",
 }

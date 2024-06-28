@@ -3,6 +3,7 @@ import AddIcon from "@icons/AddIcon";
 import { useRef, useState } from "react";
 import {
   checkIfAllowAddChild,
+  checkIfAllowAddParent,
   checkIfAllowAddSpouse,
 } from "../utils/family-tree.utils";
 import { Relationship } from "../config/enum";
@@ -19,6 +20,7 @@ export default function MemberForm() {
   const selectedUser = getSelectedMember();
   const isEdit = useFamilyStore((state) => state.isEdit);
   const baseId = useFamilyStore((state) => state.baseId);
+  const members = useFamilyStore((state) => state.members);
 
   const submitAction = (formData: FormData) => {
     setError("");
@@ -121,17 +123,18 @@ export default function MemberForm() {
                 className="bg-gray-50 border border-gray-300 dark:text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-500 dark:placeholder-black text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
               >
                 <option value={""}>-- Select relationship --</option>
-                {/* <option value={Relationship.Father}>Father</option>
-                <option value={Relationship.Mother}>Mother</option> */}
+                {checkIfAllowAddParent(members, selectedUser) && (
+                  <option value={Relationship.Parents}>Parent</option>
+                )}
                 {checkIfAllowAddSpouse(selectedUser) && (
                   <option value={Relationship.Spouse}>Spouse</option>
                 )}
                 {checkIfAllowAddChild(selectedUser) && (
                   <option value={Relationship.Child}>Child</option>
                 )}
-                {/* {!selectedUser?.isSibling && (
+                {!selectedUser?.isSibling && (
                   <option value={Relationship.Sibling}>Siblings</option>
-                )} */}
+                )}
               </select>
             </div>
           )}

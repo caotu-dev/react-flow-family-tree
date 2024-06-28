@@ -30,12 +30,22 @@ export default memo(({ data }: any) => {
   };
 
   const isRootNode = data?.isRoot;
+  const hasParents = !!data?.parents?.length;
   const hasChildren = !!data?.children?.length;
   const hasSiblings = !!data?.siblings?.length;
   const hasSpouses = !!data?.spouses?.length;
 
   return (
     <div className="nodrag">
+      {/* For parents */}
+      {hasParents && (
+        <Handle
+          type="source"
+          position={isTreeHorizontal ? Left : Top}
+          id={isTreeHorizontal ? Left : Top}
+        />
+      )}
+
       {/* For children */}
       {hasChildren && (
         <Handle

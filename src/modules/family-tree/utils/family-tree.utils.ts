@@ -46,17 +46,10 @@ export function handleAddMember(
             const siblings = currentMembers[baseMemberIndex]?.siblings ?? [];
             siblings.push(newId);
             currentMembers[baseMemberIndex]["siblings"] = siblings;
-        }else if (newMember?.relationship === Relationship.Father) {
+        }else if (newMember?.relationship === Relationship.Parents) {
             currentMembers[baseMemberIndex]["parents"] = [newId];
             newMember["isParent"] = true;
         }
-
-        // if (newMember?.relationship === Relationship.Father) {
-        //     newMember["children"] = [baseId];
-        //     currentMembers = insertBefore(currentMembers, newMember, baseId)
-        // }else {
-        //     currentMembers.push(newMember);
-        // }
 
         currentMembers.push(newMember);
 
@@ -91,6 +84,19 @@ export const checkIfAllowAddChild = (selectedUser: Member | null) => {
         return true;
     }
     return false;
+};
+
+export const checkIfAllowAddParent = (members: Member[], selectedUser: Member | null) => {
+    if(!selectedUser?.id) return false;
+
+    let isAllowed = true;
+    const baseParent = members.find(_ => _?.children?.includes(selectedUser?.id));
+    if(baseParent) {
+        isAllowed = false;
+    }else if (selectedUser?.parents?.length && selectedUser?.parents?.length > 0) {
+        isAllowed = false;
+    }
+    return isAllowed;
 };
 
 export function handleDeleteMember(

@@ -70,6 +70,7 @@ export const layoutElements = (
     newEdge.animated = !!isAnimated;
 
     // Check if target node is spouse or sibling
+    const isTargetParent = !!edge.target.isParent;
     const isTargetSpouse = !!edge.target.isSpouse;
     const isTargetSibling = !!edge.target.isSibling;
 
@@ -79,6 +80,9 @@ export const layoutElements = (
     } else if (isTargetSibling) {
       newEdge.sourceHandle = isTreeHorizontal ? Top : Left;
       newEdge.targetHandle = isTreeHorizontal ? Bottom : Right;
+    } else if (isTargetParent) {
+      newEdge.sourceHandle = isTreeHorizontal ? Left : Top;
+      newEdge.targetHandle = isTreeHorizontal ? Right : Bottom;
     } else {
       newEdge.sourceHandle = isTreeHorizontal ? Right : Bottom;
       newEdge.targetHandle = isTreeHorizontal ? Left : Top;
@@ -90,6 +94,7 @@ export const layoutElements = (
   entitreeNodes.forEach((node: any) => {
     const newNode: any = {};
 
+    const isParent = !!node?.isParent;
     const isSpouse = !!node?.isSpouse;
     const isSibling = !!node?.isSibling;
     const isRoot = node?.id === rootId;
@@ -100,6 +105,9 @@ export const layoutElements = (
     } else if (isSibling) {
       newNode.sourcePosition = isTreeHorizontal ? Top : Left;
       newNode.targetPosition = isTreeHorizontal ? Bottom : Right;
+    } else if (isParent) {
+      newNode.sourcePosition = isTreeHorizontal ? Left : Top;
+      newNode.targetPosition = isTreeHorizontal ? Right : Bottom;
     } else {
       newNode.sourcePosition = isTreeHorizontal ? Right : Bottom;
       newNode.targetPosition = isTreeHorizontal ? Left : Top;

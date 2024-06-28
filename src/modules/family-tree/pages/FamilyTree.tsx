@@ -60,8 +60,7 @@ export default function FamilyTree() {
       );
 
       // Reset current nodes and edges
-      saveFamilyNodes([]);
-      saveFamilyEdges([]);
+      resetTree();
 
       setTimeout(() => {
         saveFamilyNodes([...layoutedNodes]);
