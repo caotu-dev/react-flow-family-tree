@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect } from "react";
-import ReactFlow, { ConnectionLineType, Panel } from "reactflow";
+import ReactFlow, { Background, ConnectionLineType, Panel } from "reactflow";
 
 import { layoutElements } from "@lib/entitree-flex/layout-element";
 
@@ -16,14 +16,14 @@ import TopLeftPanel from "../components/panel/TopLeftPanel";
 import { NodeLayout } from "@/shared/enums/global.enum";
 import { globalStore } from "@/lib/zustand/globalStore";
 import TopRightPanel from "../components/panel/TopRightPanel";
-import Widgets from "../components/Widgets";
+import Widgets from "../components/widgets/Widgets";
 import { EdgeAnimated } from "../config/enum";
 import { initMembers } from "../config/node-edges";
+import Image from "next/image";
 
 const nodeTypes = {
   custom: CustomNode,
 };
-
 
 export default function FamilyTree() {
   const members = useFamilyStore((state) => state.members);
@@ -38,6 +38,7 @@ export default function FamilyTree() {
   const nodeLayout = globalStore((state) => state.nodeLayout);
   const lineStyle = globalStore((state) => state.lineStyle);
   const lineAnimation = globalStore((state) => state.lineAnimation);
+  const background = globalStore((state) => state.background);
 
   const resetTree = () => {
     saveFamilyNodes([]);
@@ -84,19 +85,11 @@ export default function FamilyTree() {
   //   renderFamilyTreeCb(obj, nodeLayout, lineStyle, lineAnimation);
   // }, [nodeLayout, lineStyle, lineAnimation]);
 
-  const changeLayout = (layout: NodeLayout) => {
-    setLayout(layout);
-  };
-
   return (
     <div className="flex items-center justify-center">
       <div className="h-dvh w-dvw bg-white relative dark:bg-gray-700">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          fitView
-          nodeTypes={nodeTypes}
-        >
+        <ReactFlow nodes={nodes} edges={edges} fitView nodeTypes={nodeTypes}>
+          <Background variant={background} />
           {/* <DevTools /> */}
           <Panel position="top-center">
             <TopCenterPanel
@@ -106,7 +99,17 @@ export default function FamilyTree() {
             />
           </Panel>
           <Panel position="top-left">
-            <TopLeftPanel changeLayout={changeLayout} />
+            <div className="rounded-md relative">
+              <Image
+                src={"/images/logo.png"}
+                width={120}
+                height={60}
+                alt="logo"
+              />
+              <h1 className="text-3xl font-bold text-gray-500 dark:text-white absolute -right-20 bottom-0">
+                FamiTree
+              </h1>
+            </div>
           </Panel>
           <Panel position="top-right">
             <TopRightPanel />

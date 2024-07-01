@@ -3,7 +3,10 @@ import ToggleSwitch from "@/shared/components/common/ToggleSwitch";
 import ChevUpIcon from "@/shared/icons/ChevUpIcon";
 import { memo, useState } from "react";
 import { ConnectionLineType } from "reactflow";
-import { EdgeAnimated } from "../config/enum";
+import { EdgeAnimated } from "../../config/enum";
+import LineStyle from "./LineStyle";
+import ChangeBackground from "./ChangeBackground";
+import ChangeLayout from "./ChangeLayout";
 
 const lineStyles = Object.values(ConnectionLineType);
 
@@ -38,30 +41,13 @@ export default memo(() => {
         </button>
       </div>
       <div
-        className={`items-center border rounded-md bg-gray-800 p-2 shadow-2xl ${
+        className={`items-start border rounded-md bg-gray-800 px-2 pb-2 pt-4 shadow-2xl ${
           isExpanded ? "flex" : "hidden"
         }`}
       >
-        <div className="p-2">
-          <div className="flex items-center justify-between">
-            <p className="text-md">Line styles:</p>
-            <ToggleSwitch label="Animation" handleToggle={handleToggle} />
-          </div>
-          <div className="flex items-center flex-wrap gap-4 mt-2">
-            {lineStyles?.map((style, index) => (
-              <div
-                key={index}
-                onClick={() => setLineStyle(style)}
-                className={`p-2 text-md cursor-pointer rounded-sm border
-                border-white border-dashed hover:bg-gray-600
-                ${lineStyle === style ? "bg-gray-600" : ""}
-            `}
-              >
-                {style}
-              </div>
-            ))}
-          </div>
-        </div>
+        <div className="w-1/2 border-r-2"><LineStyle /></div>
+        <div className="w-1/3 border-r-2"><ChangeBackground /></div>
+        <div className="w-1/3"><ChangeLayout /></div>
       </div>
     </>
   );
