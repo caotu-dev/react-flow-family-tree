@@ -19,7 +19,7 @@ import TopRightPanel from "../components/panel/TopRightPanel";
 import Widgets from "../components/widgets/Widgets";
 import { EdgeAnimated } from "../config/enum";
 import { initMembers } from "../config/node-edges";
-import Image from "next/image";
+
 
 const nodeTypes = {
   custom: CustomNode,
@@ -30,11 +30,11 @@ export default function FamilyTree() {
   const edges = useFamilyStore((state) => state.familyEdges);
   const nodes = useFamilyStore((state) => state.familyNodes);
   const isEdit = useFamilyStore((state) => state.isEdit);
-  const toggleModal = useFamilyStore((state) => state.openModal);
 
+  const toggleModal = useFamilyStore((state) => state.openModal);
   const saveFamilyNodes = useFamilyStore((state) => state.saveFamilyNodes);
   const saveFamilyEdges = useFamilyStore((state) => state.saveFamilyEdges);
-  const setLayout = globalStore((state) => state.setLayout);
+
   const nodeLayout = globalStore((state) => state.nodeLayout);
   const lineStyle = globalStore((state) => state.lineStyle);
   const lineAnimation = globalStore((state) => state.lineAnimation);
@@ -99,17 +99,7 @@ export default function FamilyTree() {
             />
           </Panel>
           <Panel position="top-left">
-            <div className="rounded-md relative">
-              <Image
-                src={"/images/logo.png"}
-                width={120}
-                height={60}
-                alt="logo"
-              />
-              <h1 className="text-3xl font-bold text-gray-500 dark:text-white absolute -right-20 bottom-0">
-                FamiTree
-              </h1>
-            </div>
+            <TopLeftPanel />
           </Panel>
           <Panel position="top-right">
             <TopRightPanel />

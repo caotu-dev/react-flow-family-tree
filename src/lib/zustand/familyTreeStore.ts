@@ -17,6 +17,7 @@ interface TFamilyTree {
     add: (newMember: Member) => void;
     update: (newMember: Member) => void;
     delete: (id: string) => void;
+    reset: () => void;
     openModal: (state: boolean, isEdit?: boolean) => void;
     setBaseId: (id: string) => void;
     getSelectedMember: () => Member | null;
@@ -46,6 +47,9 @@ export const useFamilyStore = create<TFamilyTree>((set, get) => ({
     delete: (id: string) => {
         const membersState = handleDeleteMember(get().members, id);
         set({ members: [...membersState] })
+    },
+    reset: () => {
+        set({ members: [] })
     },
     openModal: (state: boolean, isEdit = false) => {
         set({ isOpenedModal: state });

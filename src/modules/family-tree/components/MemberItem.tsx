@@ -21,7 +21,7 @@ export default function MemberItem({ data }: { data: Member }) {
     ${
       data?.sex === "male"
         ? "bg-blue-700 border-blue-700"
-        : "bg-pink-600 border-pink-600"
+        : "bg-pink-600 "
     }
     `}
     >
@@ -36,7 +36,7 @@ export default function MemberItem({ data }: { data: Member }) {
       <div className="flex items-center p-3 pb-6">
         <img
           className="w-14 h-14 rounded-full shadow-lg"
-          src={data?.avatar}
+          src={`/images/${data?.sex}.png`}
           alt={data?.name}
         />
         <div className="pl-2">
