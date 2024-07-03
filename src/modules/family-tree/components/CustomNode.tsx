@@ -5,14 +5,9 @@ import MemberItem from "./MemberItem";
 const { Top, Bottom, Left, Right } = Position;
 
 const nodeStyle = {
-  height: 36,
-  minWidth: 150,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  border: "1px solid black",
-  borderRadius: "4px",
-  color: "black",
 };
 
 export default memo(({ data }: any) => {
@@ -31,7 +26,6 @@ export default memo(({ data }: any) => {
 
   const isRootNode = data?.isRoot;
   const hasParents = !!data?.parents?.length;
-  const hasChildren = !!data?.children?.length;
   const hasSiblings = !!data?.siblings?.length;
   const hasSpouses = !!data?.spouses?.length;
 
@@ -43,15 +37,6 @@ export default memo(({ data }: any) => {
           type="source"
           position={isTreeHorizontal ? Left : Top}
           id={isTreeHorizontal ? Left : Top}
-        />
-      )}
-
-      {/* For children */}
-      {hasChildren && (
-        <Handle
-          type="source"
-          position={isTreeHorizontal ? Right : Bottom}
-          id={isTreeHorizontal ? Right : Bottom}
         />
       )}
 

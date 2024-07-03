@@ -1,7 +1,5 @@
 import { Relationship } from "../config/enum";
 import { Member } from "../types/member.types";
-const dummyAvt =
-    "https://p7.hiclipart.com/preview/722/101/213/computer-icons-user-profile-circle-abstract.jpg";
 
 export function handleAddMember(
     currentMembers: Member[],
@@ -10,7 +8,7 @@ export function handleAddMember(
 ) {
     const newId = String(currentMembers.length + 1);
     newMember["id"] = newId;
-    newMember["avatar"] = dummyAvt;
+    newMember["avatar"] = "";
 
     if (!baseId) {
         console.log("No base id");
@@ -138,20 +136,4 @@ export function handleDeleteMember(
     const members = currentMembers.filter((_) => !deletedIds.includes(_?.id));
 
     return members;
-}
-
-function insertBefore(array: Member[], newItem: Member, beforeItemId: string) {
-    // Find the index of the item before which the new item will be inserted
-    const index = array.findIndex(item => item.id === beforeItemId);
-
-    if (index === -1) {
-        // If the item is not found, return the array as is or handle the error
-        console.log("Item to insert before not found");
-        return array;
-    }
-
-    // Insert the new item before the found index
-    array.splice(index, 0, newItem);
-
-    return array;
 }

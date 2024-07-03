@@ -1,5 +1,6 @@
 "use client";
 
+import { initMembers } from "@/modules/family-tree/config/node-edges";
 import { Member } from "@/modules/family-tree/types/member.types";
 import { handleAddMember, handleDeleteMember } from "@/modules/family-tree/utils/family-tree.utils";
 import { Edge, Node } from "reactflow";
@@ -24,7 +25,7 @@ interface TFamilyTree {
 }
 
 export const useFamilyStore = create<TFamilyTree>((set, get) => ({
-    members: [],
+    members: initMembers,
     isOpenedModal: false,
     isEdit: false,
     baseId: null,

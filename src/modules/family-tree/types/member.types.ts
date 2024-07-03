@@ -5,7 +5,7 @@ export interface Member {
     sex: string;
     dob: string;
     dod?: string | null;
-    relationship?: string;
+    relationship?: string | null;
     spouses?: string[] | null;
     parents?: string[] | null;
     children?: string[] | null;

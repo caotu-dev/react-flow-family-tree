@@ -1,65 +1,60 @@
+import { Member } from "../types/member.types";
+
 export const treeRootId = 1;
 
-interface Person {
-  id: number | string;
-  name: string;
-  avatar: string;
-  dob: string;
-  sex: string;
-  dod: string | null;
-  spouses?: string[] | null;
-  children?: string[] | null;
-  siblings?: string[] | null;
-  isSpouse?: boolean,
-  isSibling?: boolean,
-}
-
-export const initMembers: Person[] = [
+export const initMembers: Member[] = [
   {
+    name: "Grandpa",
+    dob: "2024-07-08",
+    sex: "male",
+    relationship: null,
     id: "1",
-    name: "John Doe",
-    avatar: "https://p7.hiclipart.com/preview/722/101/213/computer-icons-user-profile-circle-abstract.jpg",
-    dob: "1960",
-    sex: "male",
-    dod: null,
-    children: ["3", "4"],
-    siblings: null,
+    avatar: "",
     spouses: ["2"],
+    children: ["3", "4"],
   },
   {
+    name: "Grandma",
+    dob: "2024-07-01",
+    sex: "female",
+    relationship: null,
     id: "2",
-    name: "Jane Doe",
-    avatar: "https://p7.hiclipart.com/preview/722/101/213/computer-icons-user-profile-circle-abstract.jpg",
-    dob: "1964",
-    sex: "female",
-    dod: null,
-    isSpouse: true
+    avatar: "",
+    isSpouse: true,
   },
   {
+    name: "Father",
+    dob: "2024-07-01",
+    sex: "male",
+    relationship: "child",
     id: "3",
-    name: "Jack Doe",
-    avatar: "https://p7.hiclipart.com/preview/722/101/213/computer-icons-user-profile-circle-abstract.jpg",
-    dob: "1986",
-    dod: null,
-    sex: "male",
+    avatar: "",
+    spouses: ["5"],
+    children: ["6"],
   },
   {
+    name: "Uncle",
+    dob: "2024-07-15",
+    sex: "male",
+    relationship: "child",
     id: "4",
-    name: "Jenny Doe",
-    avatar: "https://p7.hiclipart.com/preview/722/101/213/computer-icons-user-profile-circle-abstract.jpg",
-    dob: "1992",
-    dod: null,
-    spouses: ['5'],
-    sex: "female",
+    avatar: "",
   },
   {
+    name: "Mother",
+    dob: "2024-06-30",
+    sex: "female",
+    relationship: null,
     id: "5",
-    name: "Jacob Dune",
-    avatar: "https://p7.hiclipart.com/preview/722/101/213/computer-icons-user-profile-circle-abstract.jpg",
-    dob: "1992",
-    dod: null,
+    avatar: "",
+    isSpouse: true,
+  },
+  {
+    name: "Son",
+    dob: "2024-06-30",
     sex: "male",
-    isSpouse: true
-  }
-]
-
+    relationship: "child",
+    id: "6",
+    avatar: "",
+  },
+];

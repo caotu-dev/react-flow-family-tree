@@ -1,36 +1,15 @@
 import { EdgeAnimated } from "@/modules/family-tree/config/enum";
 import { NodeLayout } from "@/shared/enums/global.enum";
 import { layoutFromMap } from "entitree-flex";
-import { ConnectionLineType, Position } from "reactflow";
-
-const nodeWidth = 150;
-const nodeHeight = 36;
-
-const Orientation = {
-  Vertical: "vertical",
-  Horizontal: "horizontal",
-};
-
-const spacing = 150;
-
-const entitreeSettings: any = {
-  clone: true, // returns a copy of the input, if your application does not allow editing the original object
-  enableFlex: true, // has slightly better perfomance if turned off (node.width, node.height will not be read)
-  firstDegreeSpacing: spacing, // spacing in px between nodes belonging to the same source, eg children with same parent
-  nextAfterAccessor: "spouses", // the side node prop used to go sideways, AFTER the current node
-  nextAfterSpacing: spacing, // the spacing of the "side" nodes AFTER the current node
-  nextBeforeAccessor: "siblings", // the side node prop used to go sideways, BEFORE the current node
-  nextBeforeSpacing: spacing, // the spacing of the "side" nodes BEFORE the current node
-  nodeHeight, // default node height in px
-  nodeWidth, // default node width in px
-  orientation: Orientation.Vertical, // "vertical" to see parents top and children bottom, "horizontal" to see parents left and
-  rootX: 0, // set root position if other than 0
-  rootY: 0, // set root position if other than 0
-  secondDegreeSpacing: spacing, // spacing in px between nodes not belonging to same parent eg "cousin" nodes
-  sourcesAccessor: "parents", // the prop used as the array of ancestors ids
-  sourceTargetSpacing: spacing, // the "vertical" spacing between nodes in vertical orientation, horizontal otherwise
-  targetsAccessor: "children", // the prop used as the array of children ids
-};
+import { ConnectionLineType, Edge, Node, Position } from "reactflow";
+import {
+  Orientation,
+  connectorNodeConfig,
+  decendantSpacing,
+  entitreeSettings,
+  nodeHeight,
+  nodeWidth,
+} from "./layout-config";
 
 const { Top, Bottom, Left, Right } = Position;
 
@@ -54,8 +33,8 @@ export const layoutElements = (
     }
   );
 
-  const nodes: any = [],
-    edges: any = [];
+  const nodes: Node[] = [],
+    edges: Edge[] = [];
 
   entitreeEdges.forEach((edge: any) => {
     const sourceNode = edge.source.id;
@@ -121,12 +100,75 @@ export const layoutElements = (
     newNode.height = nodeHeight;
 
     newNode.position = {
-      x: node.x,
+      x: node.x + node.y, // Adjust x to center with connector node
       y: node.y,
     };
 
     nodes.push(newNode);
   });
 
-  return { nodes, edges };
+  const { layoutedNodes, layoutedEdges } = createConnectorNode(
+    [...nodes],
+    [...edges],
+    isTreeHorizontal
+  );
+
+  return { layoutedNodes, layoutedEdges };
 };
+
+function createConnectorNode(
+  nodes: Node[],
+  edges: Edge[],
+  isTreeHorizontal: boolean
+) {
+  let layoutedNodes: Node[] = [...nodes],
+    layoutedEdges: Edge[] = [...edges];
+
+  nodes
+    .filter((_) => _?.data?.isSpouse)
+    .forEach((node) => {
+      const nodeId = node?.id;
+      const spouse = nodes.find((_) => _.data?.spouses?.includes(nodeId));
+      const hasChildren = !!spouse?.data?.children?.length;
+
+      if (hasChildren) {
+        const spouseId = spouse?.id;
+        const connectorId = `connector-${nodeId}-${spouseId}`;
+
+        // Create connector node between parents
+        const connectorX = isTreeHorizontal
+          ? node.position.x + 84
+          : node.position.x - connectorNodeConfig.offsetX;
+        const connectorY = isTreeHorizontal
+          ? node.position.y - 60
+          : node.position.y + connectorNodeConfig.offsetY;
+        const connectorNode: Node = {
+          ...node,
+          position: {
+            x: connectorX,
+            y: connectorY,
+          },
+          id: connectorId,
+          type: "connector",
+          sourcePosition: Bottom,
+        };
+        layoutedNodes.push(connectorNode);
+
+        // Connect chilren edges to parent edge by connector node
+        const tempEdges = layoutedEdges.map((_) => {
+          const isChilrendNode = _.source === spouseId && _.target !== nodeId;
+          if (isChilrendNode) {
+            return {
+              ..._,
+              source: connectorId,
+              sourceHandle: Bottom,
+            };
+          }
+          return _;
+        });
+        layoutedEdges = tempEdges;
+      }
+    });
+
+  return { layoutedNodes, layoutedEdges };
+}

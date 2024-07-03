@@ -5,6 +5,7 @@ import { Member } from "../types/member.types";
 import AddIcon from "@icons/AddIcon";
 import EditIcon from "@/shared/icons/EditIcon";
 import DeleteIcon from "@/shared/icons/DeleteIcon";
+import { nodeWidth } from "@/lib/entitree-flex/layout-config";
 
 export default function MemberItem({ data }: { data: Member }) {
   const toggleModal = useFamilyStore((state) => state.openModal);
@@ -17,12 +18,9 @@ export default function MemberItem({ data }: { data: Member }) {
 
   return (
     <div
-      className={`display-on-hover-parent w-full max-w-sm border relative border-gray-200 rounded-lg shadow
-    ${
-      data?.sex === "male"
-        ? "bg-blue-700 border-blue-700"
-        : "bg-pink-600 "
-    }
+      className={`display-on-hover-parent w-[${nodeWidth}px] border relative rounded-lg shadow
+      border-gray-600 dark:border-gray-200
+    ${data?.sex === "male" ? "bg-blue-700 border-blue-700" : "bg-pink-600 "}
     `}
     >
       <div className="display-on-hover-child absolute right-2 top-0 flex justify-end gap-2">
@@ -35,12 +33,12 @@ export default function MemberItem({ data }: { data: Member }) {
       </div>
       <div className="flex items-center p-3 pb-6">
         <img
-          className="w-14 h-14 rounded-full shadow-lg"
+          className="w-14 h-14 rounded-full shadow-lg border-white border"
           src={`/images/${data?.sex}.png`}
           alt={data?.name}
         />
         <div className="pl-2">
-          <h5 className="text-xl font-medium text-white">
+          <h5 className="text-xl font-medium text-white whitespace-nowrap">
             {data?.name}
           </h5>
           {data?.dob && (
@@ -48,14 +46,14 @@ export default function MemberItem({ data }: { data: Member }) {
               Dob: <span className="font-bold">{data?.dob}</span>
             </div>
           )}
-          {data?.isSpouse && (
+          {/* {data?.isSpouse && (
             <div className="text-sm text-white">
               Relationship:{" "}
               <span className="font-bold">
                 {data?.sex === "male" ? "Husband" : "Wife"}
               </span>
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <div className="absolute -bottom-5 w-full flex justify-center">

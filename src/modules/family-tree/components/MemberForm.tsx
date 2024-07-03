@@ -123,9 +123,9 @@ export default function MemberForm() {
                 className="bg-gray-50 border border-gray-300 dark:text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-500 dark:placeholder-black text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
               >
                 <option value={""}>-- Select relationship --</option>
-                {checkIfAllowAddParent(members, selectedUser) && (
+                {/* {checkIfAllowAddParent(members, selectedUser) && (
                   <option value={Relationship.Parents}>Parent</option>
-                )}
+                )} */}
                 {checkIfAllowAddSpouse(selectedUser) && (
                   <option value={Relationship.Spouse}>Spouse</option>
                 )}

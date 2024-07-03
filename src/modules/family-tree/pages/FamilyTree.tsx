@@ -1,6 +1,14 @@
 "use client";
 import React, { useCallback, useEffect } from "react";
-import ReactFlow, { Background, ConnectionLineType, Panel } from "reactflow";
+import ReactFlow, {
+  Background,
+  Connection,
+  ConnectionLineType,
+  Edge,
+  EdgeChange,
+  Panel,
+  addEdge,
+} from "reactflow";
 
 import { layoutElements } from "@lib/entitree-flex/layout-element";
 
@@ -18,11 +26,11 @@ import { globalStore } from "@/lib/zustand/globalStore";
 import TopRightPanel from "../components/panel/TopRightPanel";
 import Widgets from "../components/widgets/Widgets";
 import { EdgeAnimated } from "../config/enum";
-import { initMembers } from "../config/node-edges";
-
+import ConnectorNode from "../components/ConnectorNode";
 
 const nodeTypes = {
   custom: CustomNode,
+  connector: ConnectorNode,
 };
 
 export default function FamilyTree() {
@@ -52,7 +60,7 @@ export default function FamilyTree() {
       edgeType = ConnectionLineType.Step,
       isAnimated = EdgeAnimated.Yes
     ) => {
-      const { nodes: layoutedNodes, edges: layoutedEdges } = layoutElements(
+      const { layoutedNodes, layoutedEdges } = layoutElements(
         membersData,
         membersData[1]?.id,
         layout,
@@ -79,11 +87,6 @@ export default function FamilyTree() {
       resetTree();
     }
   }, [members, nodeLayout, lineStyle, lineAnimation]);
-
-  // useEffect(() => {
-  //   const obj = arrToObj(initMembers);
-  //   renderFamilyTreeCb(obj, nodeLayout, lineStyle, lineAnimation);
-  // }, [nodeLayout, lineStyle, lineAnimation]);
 
   return (
     <div className="flex items-center justify-center">
