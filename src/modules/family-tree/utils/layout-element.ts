@@ -141,10 +141,10 @@ function createConnectorNode(
 
         // Create connector node between parents
         const connectorX = isTreeHorizontal
-          ? node.position.x + 94
+          ? node.position.x + 100
           : node.position.x - connectorNodeConfig.offsetX;
         const connectorY = isTreeHorizontal
-          ? node.position.y - 60
+          ? node.position.y - 65
           : node.position.y + connectorNodeConfig.offsetY;
         const connectorNode: Node = {
           ...node,

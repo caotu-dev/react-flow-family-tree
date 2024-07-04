@@ -6,7 +6,7 @@ export const Orientation = {
   Horizontal: "horizontal",
 };
 
-export const accessorSpacing = 212;
+export const accessorSpacing = 200;
 export const decendantSpacing = 200;
 
 export const entitreeSettings: any = {
@@ -28,7 +28,9 @@ export const entitreeSettings: any = {
   targetsAccessor: "children", // the prop used as the array of children ids
 };
 
+const connectorNodeRadius = 4;
+
 export const connectorNodeConfig = {
-  offsetX: accessorSpacing / 2 + 2,
+  offsetX: (accessorSpacing / 2) - connectorNodeRadius,
   offsetY: 22,
 };
