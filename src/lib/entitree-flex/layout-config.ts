@@ -6,7 +6,7 @@ export const Orientation = {
   Horizontal: "horizontal",
 };
 
-export const accessorSpacing = 200;
+export const accessorSpacing = 212;
 export const decendantSpacing = 200;
 
 export const entitreeSettings: any = {
@@ -30,5 +30,5 @@ export const entitreeSettings: any = {
 
 export const connectorNodeConfig = {
   offsetX: accessorSpacing / 2 + 2,
-  offsetY: 28,
+  offsetY: 22,
 };

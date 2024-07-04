@@ -1,28 +1,39 @@
-import { globalStore } from "@/lib/zustand/globalStore";
-import ToggleSwitch from "@/shared/components/common/ToggleSwitch";
 import ChevUpIcon from "@/shared/icons/ChevUpIcon";
 import { memo, useState } from "react";
-import { ConnectionLineType } from "reactflow";
-import { EdgeAnimated } from "../../config/enum";
 import LineStyle from "./LineStyle";
 import ChangeBackground from "./ChangeBackground";
 import ChangeLayout from "./ChangeLayout";
 
-const lineStyles = Object.values(ConnectionLineType);
-
 export default memo(() => {
-  const setLineStyle = globalStore((state) => state.setLineStyle);
-  const lineStyle = globalStore((state) => state.lineStyle);
-  const setLineAnimation = globalStore((state) => state.setLineAnimation);
-
   const [isExpanded, setIsExpanded] = useState(false);
+  const defaultTab = 1;
+  const [activeTab, setActiveTab] = useState<number>(defaultTab);
+  const tabs = [
+    {
+      id: 1,
+      selector: "line-styles",
+      title: "Line styles",
+    },
+    {
+      id: 2,
+      selector: "background",
+      title: "Backgrounds",
+    },
+    {
+      id: 3,
+      selector: "change-layout",
+      title: "Change layouts",
+    },
+  ];
 
-  const handleToggle = (e: any) => {
-    const isChecked = e.target.checked;
-    if (isChecked) {
-      setLineAnimation(EdgeAnimated.Yes);
-    } else {
-      setLineAnimation(EdgeAnimated.No);
+  const TabContent = ({ tabId }: Readonly<{ tabId: number }>) => {
+    switch (tabId) {
+      case 1:
+        return <LineStyle />;
+      case 2:
+        return <ChangeBackground />;
+      default:
+        return <ChangeLayout />;
     }
   };
 
@@ -41,13 +52,40 @@ export default memo(() => {
         </button>
       </div>
       <div
-        className={`items-start border rounded-md bg-gray-800 px-2 pb-2 pt-4 shadow-2xl ${
-          isExpanded ? "flex" : "hidden"
+        className={`border rounded-md bg-gray-800 px-2 pb-2 pt-2 shadow-2xl ${
+          isExpanded ? "block" : "hidden"
         }`}
       >
-        <div className="w-1/2 border-r-2"><LineStyle /></div>
-        <div className="w-1/3 border-r-2"><ChangeBackground /></div>
-        <div className="w-1/3"><ChangeLayout /></div>
+        <div className="border-b ">
+          <ul
+            className="flex flex-wrap -mb-px text-sm font-medium text-center"
+            id="default-tab"
+            data-tabs-toggle="#default-tab-content"
+            role="tablist"
+          >
+            {tabs?.map((tab) => (
+              <li key={tab?.id} className="me-2" role="presentation">
+                <button
+                  className={`inline-block p-4 ${
+                    tab?.id === activeTab ? "border-b-2 rounded-t-lg" : ""
+                  }`}
+                  id={`${tab?.selector}-tab`}
+                  data-tabs-target={`#${tab?.selector}`}
+                  type="button"
+                  role="tab"
+                  aria-controls={tab?.selector}
+                  aria-selected={tab?.id === activeTab}
+                  onClick={() => setActiveTab(tab?.id)}
+                >
+                  {tab?.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div id="default-tab-content">
+          <TabContent tabId={activeTab} />
+        </div>
       </div>
     </>
   );

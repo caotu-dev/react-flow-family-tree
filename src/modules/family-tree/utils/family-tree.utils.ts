@@ -25,7 +25,9 @@ export function handleAddMember(
 
         if (newMember?.relationship === Relationship.Spouse) {
             newMember["isSpouse"] = true;
-            currentMembers[baseMemberIndex]["spouses"] = [newId];
+            const spouses = currentMembers[baseMemberIndex]?.spouses ?? [];
+            spouses.push(newId)
+            currentMembers[baseMemberIndex]["spouses"] = spouses;
         } else if (newMember?.relationship === Relationship.Child) {
             let baseIndex = baseMemberIndex;
             if (currentMembers[baseMemberIndex]?.isSpouse) {
@@ -54,6 +56,7 @@ export function handleAddMember(
     } else {
         console.log("No relationship");
     }
+
     console.log(currentMembers);
     return currentMembers;
 }

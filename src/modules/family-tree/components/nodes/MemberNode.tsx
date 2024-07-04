@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import { Handle, Position } from "reactflow";
-import MemberItem from "./MemberItem";
+import MemberItem from "../MemberItem";
+import { NodeLayout } from "@/shared/enums/global.enum";
 
 const { Top, Bottom, Left, Right } = Position;
 
@@ -11,9 +12,9 @@ const nodeStyle = {
 };
 
 export default memo(({ data }: any) => {
-  const { isSpouse, isSibling, label, direction } = data;
+  const { isSpouse, isSibling, direction } = data;
 
-  const isTreeHorizontal = direction === "LR";
+  const isTreeHorizontal = direction === NodeLayout.Horizontal;
 
   const getTargetPosition = () => {
     if (isSpouse) {

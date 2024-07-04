@@ -10,9 +10,6 @@ export default memo(() => {
 
   return (
     <div className="p-2">
-      <div className="flex items-center justify-between">
-        <p className="text-md">Layout:</p>
-      </div>
       <div className="flex items-center flex-wrap gap-2 mt-2">
         {layouts?.map((lt, index) => (
           <div

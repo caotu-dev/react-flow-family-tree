@@ -1,12 +1,13 @@
+import { NodeLayout } from "@/shared/enums/global.enum";
 import React, { memo } from "react";
 import { Handle, Position } from "reactflow";
 
-const { Top, Bottom, Left, Right } = Position;
+const { Bottom, Right } = Position;
 
 export default memo(({ data }: any) => {
-  const { isSpouse, isSibling, label, direction } = data;
+  const { direction } = data;
 
-  const isTreeHorizontal = direction === "LR";
+  const isTreeHorizontal = direction === NodeLayout.Horizontal;
 
   return (
     <div className="nodrag">

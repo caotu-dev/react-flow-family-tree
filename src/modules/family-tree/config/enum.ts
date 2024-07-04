@@ -9,3 +9,8 @@ export enum Relationship {
     Sibling = "sibling",
     Parents = "parents",
 }
+
+export enum AppNodeName {
+    memberNode = "member",
+    connectorNode = "connector"
+}

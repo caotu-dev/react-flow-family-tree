@@ -2,18 +2,13 @@
 import React, { useCallback, useEffect } from "react";
 import ReactFlow, {
   Background,
-  Connection,
   ConnectionLineType,
-  Edge,
-  EdgeChange,
   Panel,
-  addEdge,
 } from "reactflow";
 
-import { layoutElements } from "@lib/entitree-flex/layout-element";
+import { layoutElements } from "@/modules/family-tree/utils/layout-element";
 
 import "reactflow/dist/style.css";
-import CustomNode from "../components/CustomNode";
 import { useFamilyStore } from "@lib/zustand/familyTreeStore";
 import AddMemberModal from "../components/AddMemberModal";
 import { arrToObj } from "../utils/family-tree.utils";
@@ -26,12 +21,7 @@ import { globalStore } from "@/lib/zustand/globalStore";
 import TopRightPanel from "../components/panel/TopRightPanel";
 import Widgets from "../components/widgets/Widgets";
 import { EdgeAnimated } from "../config/enum";
-import ConnectorNode from "../components/ConnectorNode";
-
-const nodeTypes = {
-  custom: CustomNode,
-  connector: ConnectorNode,
-};
+import { nodeTypes, treeRootId } from "../config/node-edges";
 
 export default function FamilyTree() {
   const members = useFamilyStore((state) => state.members);
@@ -62,7 +52,7 @@ export default function FamilyTree() {
     ) => {
       const { layoutedNodes, layoutedEdges } = layoutElements(
         membersData,
-        membersData[1]?.id,
+        treeRootId,
         layout,
         edgeType,
         isAnimated

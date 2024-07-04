@@ -1,4 +1,4 @@
-import { EdgeAnimated } from "@/modules/family-tree/config/enum";
+import { AppNodeName, EdgeAnimated } from "@/modules/family-tree/config/enum";
 import { NodeLayout } from "@/shared/enums/global.enum";
 import { layoutFromMap } from "entitree-flex";
 import { ConnectionLineType, Edge, Node, Position } from "reactflow";
@@ -9,7 +9,7 @@ import {
   entitreeSettings,
   nodeHeight,
   nodeWidth,
-} from "./layout-config";
+} from "../../../lib/entitree-flex/layout-config";
 
 const { Top, Bottom, Left, Right } = Position;
 
@@ -94,14 +94,18 @@ export const layoutElements = (
 
     newNode.data = { label: node.name, direction, isRoot, ...node };
     newNode.id = node.id;
-    newNode.type = "custom";
+    newNode.type = AppNodeName.memberNode;
 
     newNode.width = nodeWidth;
     newNode.height = nodeHeight;
 
+    // Adjust x, y to center with connector node
+    const positionX = isTreeHorizontal ? node.x : node.x + node.y;
+    const positionY = isTreeHorizontal ? node.y + positionX / 4 : node.y;
+
     newNode.position = {
-      x: node.x + node.y, // Adjust x to center with connector node
-      y: node.y,
+      x: positionX,
+      y: positionY,
     };
 
     nodes.push(newNode);
@@ -137,7 +141,7 @@ function createConnectorNode(
 
         // Create connector node between parents
         const connectorX = isTreeHorizontal
-          ? node.position.x + 84
+          ? node.position.x + 94
           : node.position.x - connectorNodeConfig.offsetX;
         const connectorY = isTreeHorizontal
           ? node.position.y - 60
@@ -149,7 +153,7 @@ function createConnectorNode(
             y: connectorY,
           },
           id: connectorId,
-          type: "connector",
+          type: AppNodeName.connectorNode,
           sourcePosition: Bottom,
         };
         layoutedNodes.push(connectorNode);

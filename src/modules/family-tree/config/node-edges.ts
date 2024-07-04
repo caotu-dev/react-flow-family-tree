@@ -1,6 +1,14 @@
+import ConnectorNode from "../components/nodes/ConnectorNode";
+import MemberNode from "../components/nodes/MemberNode";
 import { Member } from "../types/member.types";
+import { AppNodeName } from "./enum";
 
 export const treeRootId = 1;
+
+export const nodeTypes = {
+  [AppNodeName.memberNode]: MemberNode,
+  [AppNodeName.connectorNode]: ConnectorNode,
+};
 
 export const initMembers: Member[] = [
   {
@@ -31,6 +39,7 @@ export const initMembers: Member[] = [
     avatar: "",
     spouses: ["5"],
     children: ["6"],
+    parents: ["1", "2"],
   },
   {
     name: "Uncle",

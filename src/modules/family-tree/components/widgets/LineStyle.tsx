@@ -22,8 +22,7 @@ export default memo(() => {
 
   return (
     <div className="p-2">
-      <div className="flex items-center justify-between">
-        <p className="text-md">Line styles:</p>
+      <div className="flex items-end justify-end">
         <ToggleSwitch label="Animation" handleToggle={handleToggle} />
       </div>
       <div className="flex items-center flex-wrap gap-4 mt-2">

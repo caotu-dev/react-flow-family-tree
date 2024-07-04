@@ -126,15 +126,15 @@ export default function MemberForm() {
                 {/* {checkIfAllowAddParent(members, selectedUser) && (
                   <option value={Relationship.Parents}>Parent</option>
                 )} */}
-                {checkIfAllowAddSpouse(selectedUser) && (
+                { checkIfAllowAddSpouse(selectedUser) && (
                   <option value={Relationship.Spouse}>Spouse</option>
                 )}
                 {checkIfAllowAddChild(selectedUser) && (
                   <option value={Relationship.Child}>Child</option>
                 )}
-                {!selectedUser?.isSibling && (
+                {/* {!selectedUser?.isSibling && (
                   <option value={Relationship.Sibling}>Siblings</option>
-                )}
+                )} */}
               </select>
             </div>
           )}
