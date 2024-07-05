@@ -20,7 +20,7 @@ export default function MemberForm() {
   const selectedUser = getSelectedMember();
   const isEdit = useFamilyStore((state) => state.isEdit);
   const baseId = useFamilyStore((state) => state.baseId);
-  const members = useFamilyStore((state) => state.members);
+  // const members = useFamilyStore((state) => state.members);
 
   const submitAction = (formData: FormData) => {
     setError("");

@@ -133,45 +133,42 @@ function createConnectorNode(
     .forEach((node) => {
       const nodeId = node?.id;
       const spouse = nodes.find((_) => _.data?.spouses?.includes(nodeId));
-      const hasChildren = !!spouse?.data?.children?.length;
 
-      if (hasChildren) {
-        const spouseId = spouse?.id;
-        const connectorId = `connector-${nodeId}-${spouseId}`;
+      const spouseId = spouse?.id;
+      const connectorId = `connector-${nodeId}-${spouseId}`;
 
-        // Create connector node between parents
-        const connectorX = isTreeHorizontal
-          ? node.position.x + 100
-          : node.position.x - connectorNodeConfig.offsetX;
-        const connectorY = isTreeHorizontal
-          ? node.position.y - 65
-          : node.position.y + connectorNodeConfig.offsetY;
-        const connectorNode: Node = {
-          ...node,
-          position: {
-            x: connectorX,
-            y: connectorY,
-          },
-          id: connectorId,
-          type: AppNodeName.connectorNode,
-          sourcePosition: Bottom,
-        };
-        layoutedNodes.push(connectorNode);
+      // Create connector node between parents
+      const connectorX = isTreeHorizontal
+        ? node.position.x + 100
+        : node.position.x - connectorNodeConfig.offsetX;
+      const connectorY = isTreeHorizontal
+        ? node.position.y - 65
+        : node.position.y + connectorNodeConfig.offsetY;
+      const connectorNode: Node = {
+        ...node,
+        position: {
+          x: connectorX,
+          y: connectorY,
+        },
+        id: connectorId,
+        type: AppNodeName.connectorNode,
+        sourcePosition: Bottom,
+      };
+      layoutedNodes.push(connectorNode);
 
-        // Connect chilren edges to parent edge by connector node
-        const tempEdges = layoutedEdges.map((_) => {
-          const isChilrendNode = _.source === spouseId && _.target !== nodeId;
-          if (isChilrendNode) {
-            return {
-              ..._,
-              source: connectorId,
-              sourceHandle: Bottom,
-            };
-          }
-          return _;
-        });
-        layoutedEdges = tempEdges;
-      }
+      // Connect chilren edges to parent edge by connector node
+      const tempEdges = layoutedEdges.map((_) => {
+        const isChilrendNode = _.source === spouseId && _.target !== nodeId;
+        if (isChilrendNode) {
+          return {
+            ..._,
+            source: connectorId,
+            sourceHandle: Bottom,
+          };
+        }
+        return _;
+      });
+      layoutedEdges = tempEdges;
     });
 
   return { layoutedNodes, layoutedEdges };

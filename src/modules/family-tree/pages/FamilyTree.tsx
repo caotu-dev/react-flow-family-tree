@@ -1,10 +1,6 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
-import ReactFlow, {
-  Background,
-  ConnectionLineType,
-  Panel,
-} from "reactflow";
+import React, { MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
+import ReactFlow, { Background, ConnectionLineType, Panel } from "reactflow";
 
 import { layoutElements } from "@/modules/family-tree/utils/layout-element";
 
@@ -21,7 +17,8 @@ import { globalStore } from "@/lib/zustand/globalStore";
 import TopRightPanel from "../components/panel/TopRightPanel";
 import Widgets from "../components/widgets/Widgets";
 import { EdgeAnimated } from "../config/enum";
-import { nodeTypes, treeRootId } from "../config/node-edges";
+import { defaultViewport, nodeTypes, treeRootId } from "../config/node-edges";
+import ContextMenu from "../components/ContextMenu";
 
 export default function FamilyTree() {
   const members = useFamilyStore((state) => state.members);
@@ -37,6 +34,9 @@ export default function FamilyTree() {
   const lineStyle = globalStore((state) => state.lineStyle);
   const lineAnimation = globalStore((state) => state.lineAnimation);
   const background = globalStore((state) => state.background);
+
+  const [menu, setMenu] = useState<{} | null>(null);
+  const ref = useRef<any>(null);
 
   const resetTree = () => {
     saveFamilyNodes([]);
@@ -60,8 +60,6 @@ export default function FamilyTree() {
 
       // Reset current nodes and edges
       resetTree();
-      console.log(layoutedNodes);
-      // console.log(layoutedEdges)
 
       setTimeout(() => {
         saveFamilyNodes([...layoutedNodes]);
@@ -70,6 +68,30 @@ export default function FamilyTree() {
     },
     []
   );
+
+  const onNodeContextMenu = useCallback(
+    (event: any, node: any) => {
+      // Prevent native context menu from showing
+      event.preventDefault();
+      if(!ref.current) return;
+
+      // Calculate position of the context menu. We want to make sure it
+      // doesn't get positioned off-screen.
+      const pane = ref.current?.getBoundingClientRect() ;
+      setMenu({
+        id: node.id,
+        top: event.clientY < pane.height - 200 && event.clientY,
+        left: event.clientX < pane.width - 200 && event.clientX,
+        right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
+        bottom:
+          event.clientY >= pane.height - 200 && pane.height - event.clientY,
+      });
+    },
+    [setMenu]
+  );
+
+  // Close the context menu if it's open whenever the window is clicked.
+  const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
 
   useEffect(() => {
     if (members.length > 0) {
@@ -83,9 +105,23 @@ export default function FamilyTree() {
   return (
     <div className="flex items-center justify-center">
       <div className="h-dvh w-dvw bg-white relative dark:bg-gray-700">
-        <ReactFlow nodes={nodes} edges={edges} fitView nodeTypes={nodeTypes}>
+        <ReactFlow
+          ref={ref}
+          nodes={nodes}
+          edges={edges}
+          fitView
+          nodeTypes={nodeTypes}
+          onPaneClick={onPaneClick}
+          onNodeContextMenu={onNodeContextMenu}
+          defaultViewport={defaultViewport}
+        >
           <Background variant={background} />
+
+          {menu && <ContextMenu onClick={onPaneClick} {...menu} />}
+
           {/* <DevTools /> */}
+
+          {/* Panels */}
           <Panel position="top-center">
             <TopCenterPanel
               nodes={nodes}

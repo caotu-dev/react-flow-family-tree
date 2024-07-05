@@ -28,9 +28,7 @@ export const entitreeSettings: any = {
   targetsAccessor: "children", // the prop used as the array of children ids
 };
 
-const connectorNodeRadius = 4;
-
 export const connectorNodeConfig = {
-  offsetX: (accessorSpacing / 2) - connectorNodeRadius,
-  offsetY: 22,
+  offsetX: (accessorSpacing / 2) + 12,
+  offsetY: 40,
 };
